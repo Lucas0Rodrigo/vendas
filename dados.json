@@ -1,5 +1,15 @@
 {
- "kits": [],
+ "kits": [
+  {
+   "n": 1,
+   "f": [
+    "Oreo",
+    "Maracuja",
+    "70% Cacau"
+   ],
+   "e": 1
+  }
+ ],
  "sales": [],
  "repassado": 0
 }
