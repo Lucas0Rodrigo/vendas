@@ -26,6 +26,33 @@
     "70% Cacau"
    ],
    "e": 2
+  },
+  {
+   "n": 4,
+   "f": [
+    "Oreo",
+    "Dois Amores",
+    "70% Cacau"
+   ],
+   "e": 2
+  },
+  {
+   "n": 5,
+   "f": [
+    "Oreo",
+    "Maracuja",
+    "Brigadeiro"
+   ],
+   "e": 1
+  },
+  {
+   "n": 6,
+   "f": [
+    "Dois Amores",
+    "Ferrero",
+    "70% Cacau"
+   ],
+   "e": 1
   }
  ],
  "sales": [],
