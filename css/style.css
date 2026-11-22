@@ -64,3 +64,4 @@ td::before{content:attr(data-label);color:var(--mut);font-size:.72rem;text-trans
 td[data-label=""]{justify-content:flex-end}td[data-label=""]::before{display:none}
 td button{padding:8px 12px;font-size:.85rem}.row>*{min-width:0}.top{padding:12px 14px}
 }
+input[type=number]{-moz-appearance:textfield;appearance:textfield}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
