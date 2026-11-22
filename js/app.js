@@ -43,12 +43,15 @@ async function flush(type){
         const p=await put('dados.json',D,r.sha);
         if(p.status==409||p.status==422)continue;
         if(!p.ok)throw Error('Erro ao salvar ('+p.status+')');
+        await pubResumo();
       }
       pending=[];await snap(type);toast(type=='auto'?'Autosave ✓':'Salvo ✓');break;
     }
   }catch(e){toast(e.message);await load().catch(()=>{});pending.forEach(fn=>fn(D))}
   saving=false;$('#sv').disabled=false;mark();render();
 }
+async function pubResumo(){try{const S=D.sales,v=s=>s.items.reduce((a,i)=>a+i.q,0)*PRICE,pago=S.filter(s=>s.paid).reduce((a,s)=>a+v(s),0),kits=D.kits.reduce((a,k)=>a+(k.e||0),0),conta=pago-D.repassado;
+  const r=await get('resumo.json');await put('resumo.json',{trufas:kits*3,kits,conta,contaTexto:brl(conta),atualizado:new Date().toISOString()},r.sha)}catch(e){}}
 async function loadSaves(){try{HS=Object.assign({auto:[],manual:[]},(await get('saves.json')).data||{})}catch(e){toast(e.message)}renderSaves()}
 function renderSaves(){[['manual','#sm'],['auto','#sa']].forEach(([k,id])=>$(id).innerHTML=HS[k].map((s,i)=>`<div class="rk"><span><b>${new Date(s.t).toLocaleString('pt-BR')}</b><br><small class="mut">${s.d.sales.length} vendas · ${s.d.kits.length} kits · repassado ${brl(s.d.repassado||0)}</small></span><button data-a="rs" data-k="${k}" data-i="${i}">Restaurar</button></div>`).join('')||'<p class="mut">Nenhum save ainda.</p>')}
 const sold=n=>D.sales.reduce((a,s)=>a+s.items.filter(i=>i.k==n).reduce((x,i)=>x+i.q,0),0);
