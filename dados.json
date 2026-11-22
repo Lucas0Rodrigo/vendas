@@ -55,6 +55,22 @@
    "e": 1
   }
  ],
- "sales": [],
+ "sales": [
+  {
+   "id": 1795368561263,
+   "buyer": "Lucas",
+   "date": "2026-11-22",
+   "items": [
+    {
+     "k": 2,
+     "q": 1
+    }
+   ],
+   "paid": true,
+   "method": "Pix",
+   "paidDate": "2026-11-22",
+   "delivered": true
+  }
+ ],
  "repassado": 0
 }
