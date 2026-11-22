@@ -1,15 +1,5 @@
 {
- "kits": [
-  {
-   "n": 1,
-   "f": [
-    "Chocolate",
-    "Maracuja",
-    "70% Cacau"
-   ],
-   "e": 1
-  }
- ],
+ "kits": [],
  "sales": [],
  "repassado": 0
 }
