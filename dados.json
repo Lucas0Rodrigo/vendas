@@ -1,1 +1,15 @@
-{"kits":[],"sales":[],"repassado":0}
+{
+ "kits": [
+  {
+   "n": 1,
+   "f": [
+    "Chocolate",
+    "Maracuja",
+    "70% Cacau"
+   ],
+   "e": 1
+  }
+ ],
+ "sales": [],
+ "repassado": 0
+}
