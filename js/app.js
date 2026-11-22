@@ -61,7 +61,7 @@ function render(){
   $('#lista').innerHTML=L.map(s=>`<tr><td><span class="dot ${s.paid&&s.delivered?'g':s.paid||s.delivered?'m':''}"></span></td><td>${fmt(s.date)}</td><td><b>${esc(s.buyer)}</b></td><td>${s.items.map(i=>i.q+'× Kit '+i.k).join(', ')}</td><td><b>${brl(v(s))}</b></td>
    <td><button class="${s.paid?'ok':'no'}" data-a="pay" data-i="${s.id}">${s.paid?'✓ '+s.method:'Marcar pago'}</button>${s.paid?` <small>${fmt(s.paidDate)}</small>`:''}</td>
    <td><button class="${s.delivered?'ok':'no'}" data-a="del" data-i="${s.id}">${s.delivered?'✓ Entregue':'Marcar entregue'}</button></td><td><button class="bad" data-a="rm" data-i="${s.id}">🗑</button></td></tr>`).join('')||'<tr><td colspan="8" class="mut">Nenhuma venda.</td></tr>';
-  $('#kitlist').innerHTML=ks.map(k=>`<tr><td><b>Kit ${k.n}</b></td><td>${esc(k.f.join(' · '))}</td><td>${k.e||0}</td><td>${sold(k.n)}</td><td><b>${left(k.n)}</b></td><td><button class="bad" data-a="rk" data-i="${k.n}">🗑</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">Cadastre seu primeiro kit.</td></tr>';
+  $('#kitlist').innerHTML=ks.map(k=>`<tr><td><b>Kit ${k.n}</b></td><td>${esc(k.f.join(' · '))}</td><td><button data-a="km" data-i="${k.n}">−</button> <input class="qn" type="number" min="0" value="${k.e||0}" data-k="${k.n}"> <button data-a="kp" data-i="${k.n}">+</button></td><td>${sold(k.n)}</td><td><b>${left(k.n)}</b></td><td><button class="bad" data-a="rk" data-i="${k.n}">🗑</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">Cadastre seu primeiro kit.</td></tr>';
   renderCart();
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t);$('#tt').textContent=b.querySelector('span').textContent});
@@ -84,8 +84,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
     else{const pd=prompt('Data do pagamento (AAAA-MM-DD)',today());if(!pd)return;const m=confirm('OK = Pix | Cancelar = Dinheiro')?'Pix':'Dinheiro';save(d=>Object.assign(d.sales.find(x=>x.id==i),{paid:true,method:m,paidDate:pd}))}}
   if(a=='del')save(d=>{const s=d.sales.find(x=>x.id==i);s.delivered=!s.delivered});
   if(a=='rm'&&confirm('Apagar esta venda?'))save(d=>d.sales=d.sales.filter(x=>x.id!=i));
+  if(a=='km'||a=='kp')save(d=>{const k=d.kits.find(x=>x.n==i);k.e=Math.max(0,(k.e||0)+(a=='kp'?1:-1))});
   if(a=='rk'&&confirm('Apagar este kit?'))save(d=>d.kits=d.kits.filter(x=>x.n!=i))});
 async function init(){const f=$('#fc');f.owner.value=C.owner;f.repo.value=C.repo;f.token.value=C.token;
   $('#fv').date.value=today();
   if(C.owner&&C.repo)await load().catch(e=>toast(e.message));render()}
 init();
+
+document.addEventListener('change',e=>{const t=e.target;if(!t.classList.contains('qn'))return;const n=+t.dataset.k,v=Math.max(0,parseInt(t.value)||0);save(d=>{d.kits.find(x=>x.n==n).e=v})});
