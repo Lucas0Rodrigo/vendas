@@ -102,6 +102,86 @@
  ],
  "manual": [
   {
+   "t": "2026-11-22T17:45:36.542Z",
+   "d": {
+    "kits": [
+     {
+      "n": 1,
+      "f": [
+       "Oreo",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 3
+     },
+     {
+      "n": 2,
+      "f": [
+       "Ferrero",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 1
+     },
+     {
+      "n": 3,
+      "f": [
+       "Brigadeiro",
+       "Oreo",
+       "70% Cacau"
+      ],
+      "e": 1
+     },
+     {
+      "n": 4,
+      "f": [
+       "Oreo",
+       "Dois Amores",
+       "70% Cacau"
+      ],
+      "e": 2
+     },
+     {
+      "n": 5,
+      "f": [
+       "Oreo",
+       "Maracuja",
+       "Brigadeiro"
+      ],
+      "e": 1
+     },
+     {
+      "n": 6,
+      "f": [
+       "Dois Amores",
+       "Ferrero",
+       "70% Cacau"
+      ],
+      "e": 1
+     }
+    ],
+    "sales": [
+     {
+      "id": 1795368561263,
+      "buyer": "Lucas",
+      "date": "2026-11-22",
+      "items": [
+       {
+        "k": 2,
+        "q": 1
+       }
+      ],
+      "paid": true,
+      "method": "Pix",
+      "paidDate": "2026-11-22",
+      "delivered": true
+     }
+    ],
+    "repassado": 0,
+    "v": 2
+   }
+  },
+  {
    "t": "2026-11-22T17:31:01.093Z",
    "d": {
     "kits": [
