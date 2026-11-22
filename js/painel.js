@@ -10,7 +10,7 @@ async function go(){
     const sold=n=>S.reduce((a,s)=>a+s.items.filter(i=>i.k==n).reduce((x,i)=>x+i.q,0),0);
     const kits=K.reduce((a,k)=>a+(d.v?(k.e||0):(k.e||0)-sold(k.n)),0);
     const pago=S.filter(s=>s.paid).reduce((a,s)=>a+s.items.reduce((x,i)=>x+i.q,0)*10,0);
-    $('#t').textContent=kits*3;$('#k').textContent=kits+' kit(s) de 3 trufas';$('#c').textContent=brl(pago-(d.repassado||0));
+    $('#t').textContent=kits;$('#k').textContent='';$('#c').textContent=brl(pago-(d.repassado||0));
     $('#u').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   }catch(e){$('#u').textContent='Não consegui atualizar ('+e.message+')'}
 }
