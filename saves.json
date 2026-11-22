@@ -1,0 +1,41 @@
+{
+ "auto": [
+  {
+   "t": "2026-11-22T17:28:03.125Z",
+   "d": {
+    "kits": [
+     {
+      "n": 1,
+      "f": [
+       "Oreo",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 3
+     },
+     {
+      "n": 2,
+      "f": [
+       "Ferrero",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 1
+     },
+     {
+      "n": 3,
+      "f": [
+       "Brigadeiro",
+       "Oreo",
+       "70% Cacau"
+      ],
+      "e": 2
+     }
+    ],
+    "sales": [],
+    "repassado": 0
+   }
+  }
+ ],
+ "manual": []
+}
