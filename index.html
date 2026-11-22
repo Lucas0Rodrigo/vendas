@@ -3,8 +3,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trufas da Igreja</title><link rel="stylesheet" href="css/style.css"></head><body>
 <aside><div class="logo">🍫 <span>Trufas</span></div><nav>
-<button data-t="resumo" class="on"><i>📊</i><span>Resumo</span></button><button data-t="vendas"><i>🧾</i><span>Vendas</span></button><button data-t="kits"><i>🍫</i><span>Kits</span></button><button data-t="config"><i>⚙️</i><span>Config</span></button></nav></aside>
-<div class="wrap"><div class="top"><h1 id="tt">Resumo</h1></div><main>
+<button data-t="resumo" class="on"><i>📊</i><span>Resumo</span></button><button data-t="vendas"><i>🧾</i><span>Vendas</span></button><button data-t="kits"><i>🍫</i><span>Kits</span></button><button data-t="saves"><i>🕘</i><span>Saves</span></button><button data-t="config"><i>⚙️</i><span>Config</span></button></nav></aside>
+<div class="wrap"><div class="top"><h1 id="tt">Resumo</h1><button id="sv">💾 <span>Salvo</span></button></div><main>
 <section id="resumo"><div class="cards" id="cards"></div>
 <div class="box"><h2>Repasse para a igreja</h2><div class="row"><input id="rep" type="number" step="0.01" min="0" placeholder="Valor enviado (R$)"><button id="repBtn">Somar ao total entregue</button></div></div>
 <div class="grid"><div class="box"><h2>Quem mais compra</h2><div id="top"></div></div><div class="box"><h2>Sabores que mais saem</h2><div id="sab"></div></div>
@@ -22,6 +22,7 @@
 <section id="kits" hidden><form id="fk" class="box"><h2>Cadastrar kit</h2><div class="row"><label>Sabores (separe por vírgula)<input name="f" placeholder="chocolate, ninho, morango" required></label><button>Cadastrar kit</button></div>
 <p class="mut">Número automático: se os sabores já existirem em um kit, soma +1 no estoque dele. Para mudar só a quantidade, use os botões na tabela abaixo.</p></form>
 <div class="box"><div class="tw"><table><thead><tr><th>Kit</th><th>Sabores</th><th>Estoque (ajuste aqui)</th><th>Vendidos</th><th>Restam</th><th></th></tr></thead><tbody id="kitlist"></tbody></table></div></div></section>
+<section id="saves" hidden><p class="mut">Guarda os últimos 10 saves manuais e 10 automáticos (a cada 1 min, se houver alteração).</p><div class="grid"><div class="box"><h2>Manuais</h2><div id="sm"></div></div><div class="box"><h2>Automáticos</h2><div id="sa"></div></div></div></section>
 <section id="config" hidden><form id="fc" class="box"><h2>Conexão com o GitHub</h2>
 <label>Usuário do GitHub<input name="owner" required></label><label>Nome do repositório<input name="repo" required></label>
 <label>Token (fica só neste aparelho)<input name="token" type="password" placeholder="github_pat_..."></label>

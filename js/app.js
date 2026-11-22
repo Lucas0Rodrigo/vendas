@@ -8,29 +8,48 @@ const fmt=d=>d?d.split('-').reverse().join('/'):'';
 const days=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
 const qty=s=>s.items.reduce((a,i)=>a+i.q,0);
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2800)}
-const url=()=>`https://api.github.com/repos/${C.owner}/${C.repo}/contents/dados.json`;
 const H=()=>({Accept:'application/vnd.github+json',...(C.token&&{Authorization:'Bearer '+C.token})});
-async function load(){
-  const r=await fetch(url()+'?t='+Date.now(),{headers:H(),cache:'no-store'});
-  if(r.status==404){sha=null;return}
-  if(!r.ok)throw Error('Erro ao ler dados ('+r.status+')');
-  const j=await r.json();sha=j.sha;
-  const txt=new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,'')),c=>c.charCodeAt(0)));
-  D=Object.assign({kits:[],sales:[],repassado:0},JSON.parse(txt));
+const url=f=>`https://api.github.com/repos/${C.owner}/${C.repo}/contents/${f}`;
+async function get(f){
+  const r=await fetch(url(f)+'?t='+Date.now(),{headers:H(),cache:'no-store'});
+  if(r.status==404)return{sha:null,data:null};
+  if(!r.ok)throw Error('Erro ao ler '+f+' ('+r.status+')');
+  const j=await r.json();
+  return{sha:j.sha,data:JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,'')),c=>c.charCodeAt(0))))};
 }
-async function save(fn,retry=1){
+const put=(f,o,sha)=>{const b={message:'atualiza '+f,content:btoa(unescape(encodeURIComponent(JSON.stringify(o,null,1))))};if(sha)b.sha=sha;return fetch(url(f),{method:'PUT',headers:H(),body:JSON.stringify(b)})};
+const base=x=>Object.assign({kits:[],sales:[],repassado:0},x||{});
+async function load(){D=base((await get('dados.json')).data)}
+let pending=[],saving=false,HS={auto:[],manual:[]};
+function mark(){const b=$('#sv');b.classList.toggle('dirty',pending.length>0);b.querySelector('span').textContent=pending.length?'Salvar alterações':'Salvo'}
+function mut(fn){if(!C.token){toast('Configure o token na aba Config');return Promise.resolve()}fn(D);pending.push(fn);mark();render();return Promise.resolve()}
+async function snap(type){
+  for(let t=0;t<2;t++){
+    const r=await get('saves.json'),S=Object.assign({auto:[],manual:[]},r.data||{});
+    S[type].unshift({t:new Date().toISOString(),d:JSON.parse(JSON.stringify(D))});S[type]=S[type].slice(0,10);
+    const p=await put('saves.json',S,r.sha);if(p.ok){HS=S;return}if(p.status!=409&&p.status!=422)return;
+  }
+}
+async function flush(type){
+  if(saving||(type=='auto'&&!pending.length))return;
   if(!C.token)return toast('Configure o token na aba Config');
+  saving=true;$('#sv').disabled=true;
   try{
-    await load();fn(D);
-    const body={message:'atualiza dados',content:btoa(unescape(encodeURIComponent(JSON.stringify(D,null,1))))};
-    if(sha)body.sha=sha;
-    const r=await fetch(url(),{method:'PUT',headers:H(),body:JSON.stringify(body)});
-    if((r.status==409||r.status==422)&&retry)return save(fn,0);
-    if(!r.ok)throw Error('Erro ao salvar ('+r.status+')');
-    sha=(await r.json()).content.sha;toast('Salvo ✓');
-  }catch(e){toast(e.message);await load().catch(()=>{})}
-  render();
+    for(let t=0;t<3;t++){
+      const r=await get('dados.json');D=base(r.data);
+      if(pending.length){
+        pending.forEach(fn=>fn(D));
+        const p=await put('dados.json',D,r.sha);
+        if(p.status==409||p.status==422)continue;
+        if(!p.ok)throw Error('Erro ao salvar ('+p.status+')');
+      }
+      pending=[];await snap(type);toast(type=='auto'?'Autosave ✓':'Salvo ✓');break;
+    }
+  }catch(e){toast(e.message);await load().catch(()=>{});pending.forEach(fn=>fn(D))}
+  saving=false;$('#sv').disabled=false;mark();render();
 }
+async function loadSaves(){try{HS=Object.assign({auto:[],manual:[]},(await get('saves.json')).data||{})}catch(e){toast(e.message)}renderSaves()}
+function renderSaves(){[['manual','#sm'],['auto','#sa']].forEach(([k,id])=>$(id).innerHTML=HS[k].map((s,i)=>`<div class="rk"><span><b>${new Date(s.t).toLocaleString('pt-BR')}</b><br><small class="mut">${s.d.sales.length} vendas · ${s.d.kits.length} kits · repassado ${brl(s.d.repassado||0)}</small></span><button data-a="rs" data-k="${k}" data-i="${i}">Restaurar</button></div>`).join('')||'<p class="mut">Nenhum save ainda.</p>')}
 const sold=n=>D.sales.reduce((a,s)=>a+s.items.filter(i=>i.k==n).reduce((x,i)=>x+i.q,0),0);
 const key=a=>a.map(x=>x.toLowerCase()).sort().join('|');
 const rk=(a,f)=>a.length?a.map((x,i)=>`<div class="rk"><i>${i+1}</i>${f(x)}</div>`).join(''):'<p class="mut">Sem dados ainda.</p>';
@@ -64,31 +83,37 @@ function render(){
   $('#kitlist').innerHTML=ks.map(k=>`<tr><td><b>Kit ${k.n}</b></td><td>${esc(k.f.join(' · '))}</td><td><button data-a="km" data-i="${k.n}">−</button> <input class="qn" type="number" min="0" value="${k.e||0}" data-k="${k.n}"> <button data-a="kp" data-i="${k.n}">+</button></td><td>${sold(k.n)}</td><td><b>${left(k.n)}</b></td><td><button class="bad" data-a="rk" data-i="${k.n}">🗑</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">Cadastre seu primeiro kit.</td></tr>';
   renderCart();
 }
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t);$('#tt').textContent=b.querySelector('span').textContent});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t);$('#tt').textContent=b.querySelector('span').textContent;if(b.dataset.t=='saves')loadSaves()});
 $('#busca').oninput=e=>{qs=e.target.value.trim().toLowerCase();render()};$('#flt').onchange=e=>{flt=e.target.value;render()};
 $('#fv').paid.onchange=e=>{$('#pg').hidden=!e.target.checked;$('#fv').paidDate.value=today()};
 $('#fv').onsubmit=e=>{e.preventDefault();const f=e.target;
   const items=Object.keys(cart).filter(k=>cart[k]>0).map(k=>({k:+k,q:cart[k]}));
   if(!items.length)return toast('Escolha ao menos um kit');
   const s={id:Date.now(),buyer:f.buyer.value.trim(),date:f.date.value,items,paid:f.paid.checked,method:f.paid.checked?f.method.value:'',paidDate:f.paid.checked?f.paidDate.value:'',delivered:f.delivered.checked};
-  save(d=>d.sales.push(s)).then(()=>{cart={};f.buyer.value='';f.paid.checked=f.delivered.checked=false;$('#pg').hidden=true;f.date.value=today();render()})};
+  mut(d=>d.sales.push(s)).then(()=>{cart={};f.buyer.value='';f.paid.checked=f.delivered.checked=false;$('#pg').hidden=true;f.date.value=today();render()})};
 $('#fk').onsubmit=e=>{e.preventDefault();const f=e.target,fl=[...new Set(f.f.value.split(',').map(x=>x.trim()).filter(Boolean))];
   if(!fl.length)return;
-  save(d=>{const ex=d.kits.find(k=>key(k.f)==key(fl));if(ex)ex.e=(ex.e||0)+1;else d.kits.push({n:Math.max(0,...d.kits.map(k=>k.n))+1,f:fl,e:1})}).then(()=>f.f.value='')};
-$('#repBtn').onclick=()=>{const x=parseFloat($('#rep').value);if(!(x>0))return toast('Informe um valor');save(d=>d.repassado=Math.round((d.repassado+x)*100)/100).then(()=>$('#rep').value='')};
+  mut(d=>{const ex=d.kits.find(k=>key(k.f)==key(fl));if(ex)ex.e=(ex.e||0)+1;else d.kits.push({n:Math.max(0,...d.kits.map(k=>k.n))+1,f:fl,e:1})}).then(()=>f.f.value='')};
+$('#repBtn').onclick=()=>{const x=parseFloat($('#rep').value);if(!(x>0))return toast('Informe um valor');mut(d=>d.repassado=Math.round((d.repassado+x)*100)/100).then(()=>$('#rep').value='')};
 $('#fc').onsubmit=e=>{e.preventDefault();const f=e.target;Object.assign(C,{owner:f.owner.value.trim(),repo:f.repo.value.trim(),token:f.token.value.trim()});localStorage.setItem('cfg',JSON.stringify(C));toast('Configuração salva');init()};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const i=+b.dataset.i,a=b.dataset.a;
+  if(a=='rs'){const s=HS[b.dataset.k][i];if(s&&confirm('Restaurar este save? Depois clique em Salvar para confirmar.')){mut(d=>{const c=JSON.parse(JSON.stringify(s.d));d.kits=c.kits;d.sales=c.sales;d.repassado=c.repassado||0});document.querySelector('nav button').click()}return}
   if(a=='p'){cart[i]=(cart[i]||0)+1;return renderCart()}
   if(a=='m'){cart[i]=Math.max(0,(cart[i]||0)-1);return renderCart()}
-  if(a=='pay'){const s=D.sales.find(x=>x.id==i);if(s.paid)save(d=>Object.assign(d.sales.find(x=>x.id==i),{paid:false,method:'',paidDate:''}));
-    else{const pd=prompt('Data do pagamento (AAAA-MM-DD)',today());if(!pd)return;const m=confirm('OK = Pix | Cancelar = Dinheiro')?'Pix':'Dinheiro';save(d=>Object.assign(d.sales.find(x=>x.id==i),{paid:true,method:m,paidDate:pd}))}}
-  if(a=='del')save(d=>{const s=d.sales.find(x=>x.id==i);s.delivered=!s.delivered});
-  if(a=='rm'&&confirm('Apagar esta venda?'))save(d=>d.sales=d.sales.filter(x=>x.id!=i));
-  if(a=='km'||a=='kp')save(d=>{const k=d.kits.find(x=>x.n==i);k.e=Math.max(0,(k.e||0)+(a=='kp'?1:-1))});
-  if(a=='rk'&&confirm('Apagar este kit?'))save(d=>d.kits=d.kits.filter(x=>x.n!=i))});
+  if(a=='pay'){const s=D.sales.find(x=>x.id==i);if(s.paid)mut(d=>Object.assign(d.sales.find(x=>x.id==i),{paid:false,method:'',paidDate:''}));
+    else{const pd=prompt('Data do pagamento (AAAA-MM-DD)',today());if(!pd)return;const m=confirm('OK = Pix | Cancelar = Dinheiro')?'Pix':'Dinheiro';mut(d=>Object.assign(d.sales.find(x=>x.id==i),{paid:true,method:m,paidDate:pd}))}}
+  if(a=='del')mut(d=>{const s=d.sales.find(x=>x.id==i);s.delivered=!s.delivered});
+  if(a=='rm'&&confirm('Apagar esta venda?'))mut(d=>d.sales=d.sales.filter(x=>x.id!=i));
+  if(a=='km'||a=='kp')mut(d=>{const k=d.kits.find(x=>x.n==i);k.e=Math.max(0,(k.e||0)+(a=='kp'?1:-1))});
+  if(a=='rk'&&confirm('Apagar este kit?'))mut(d=>d.kits=d.kits.filter(x=>x.n!=i))});
 async function init(){const f=$('#fc');f.owner.value=C.owner;f.repo.value=C.repo;f.token.value=C.token;
   $('#fv').date.value=today();
   if(C.owner&&C.repo)await load().catch(e=>toast(e.message));render()}
 init();
 
-document.addEventListener('change',e=>{const t=e.target;if(!t.classList.contains('qn'))return;const n=+t.dataset.k,v=Math.max(0,parseInt(t.value)||0);save(d=>{d.kits.find(x=>x.n==n).e=v})});
+document.addEventListener('change',e=>{const t=e.target;if(!t.classList.contains('qn'))return;const n=+t.dataset.k,v=Math.max(0,parseInt(t.value)||0);mut(d=>{d.kits.find(x=>x.n==n).e=v})});
+
+$('#sv').onclick=()=>flush('manual');
+setInterval(()=>flush('auto'),60000);
+addEventListener('beforeunload',e=>{if(pending.length){e.preventDefault();e.returnValue=''}});
+mark();
