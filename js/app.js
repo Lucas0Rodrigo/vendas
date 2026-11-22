@@ -1,4 +1,5 @@
 const $=s=>document.querySelector(s),PRICE=10;
+const ic=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
 let D={kits:[],sales:[],repassado:0},sha=null;
 const C=JSON.parse(localStorage.getItem('cfg')||'null')||{owner:location.hostname.endsWith('github.io')?location.hostname.split('.')[0]:'',repo:location.pathname.split('/')[1]||'',token:''};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
@@ -64,7 +65,7 @@ function renderCart(){
 function render(){
   const S=D.sales,v=s=>qty(s)*PRICE;
   const total=S.reduce((a,s)=>a+v(s),0),pago=S.filter(s=>s.paid).reduce((a,s)=>a+v(s),0);
-  $('#cards').innerHTML=[['🛒','Total vendido',total],['💰','Já recebido',pago],['👛','Em conta',pago-D.repassado],['⛪','Entregue à igreja',D.repassado],['⏳','A receber',total-pago]].map(c=>`<div class="card"><i>${c[0]}</i><div><small>${c[1]}</small><b>${brl(c[2])}</b></div></div>`).join('');
+  $('#cards').innerHTML=[['cart','Total vendido',total],['cash','Já recebido',pago],['wallet','Em conta',pago-D.repassado],['church','Entregue à igreja',D.repassado],['hour','A receber',total-pago]].map(c=>`<div class="card"><i>${ic(c[0])}</i><div><small>${c[1]}</small><b>${brl(c[2])}</b></div></div>`).join('');
   const B={},F={};
   S.forEach(s=>{const k=s.buyer.trim().toLowerCase(),b=B[k]||(B[k]={n:s.buyer.trim(),k:0,d:[]});b.k+=qty(s);if(s.paid&&s.paidDate)b.d.push(days(s.date,s.paidDate));
     s.items.forEach(i=>{const kit=D.kits.find(x=>x.n==i.k);kit&&kit.f.forEach(f=>{const x=f.trim().toLowerCase();(F[x]=F[x]||{n:f.trim(),q:0}).q+=i.q})})});
@@ -79,8 +80,8 @@ function render(){
   const L=[...S].reverse().filter(s=>s.buyer.toLowerCase().includes(qs)&&(flt!='np'||!s.paid)&&(flt!='ne'||!s.delivered));
   $('#lista').innerHTML=L.map(s=>`<tr><td><span class="dot ${s.paid&&s.delivered?'g':s.paid||s.delivered?'m':''}"></span></td><td>${fmt(s.date)}</td><td><b>${esc(s.buyer)}</b></td><td>${s.items.map(i=>i.q+'× Kit '+i.k).join(', ')}</td><td><b>${brl(v(s))}</b></td>
    <td><button class="${s.paid?'ok':'no'}" data-a="pay" data-i="${s.id}">${s.paid?'✓ '+s.method:'Marcar pago'}</button>${s.paid?` <small>${fmt(s.paidDate)}</small>`:''}</td>
-   <td><button class="${s.delivered?'ok':'no'}" data-a="del" data-i="${s.id}">${s.delivered?'✓ Entregue':'Marcar entregue'}</button></td><td><button class="bad" data-a="rm" data-i="${s.id}">🗑</button></td></tr>`).join('')||'<tr><td colspan="8" class="mut">Nenhuma venda.</td></tr>';
-  $('#kitlist').innerHTML=ks.map(k=>`<tr><td><b>Kit ${k.n}</b></td><td>${esc(k.f.join(' · '))}</td><td><button data-a="km" data-i="${k.n}">−</button> <input class="qn" type="number" min="0" value="${k.e||0}" data-k="${k.n}"> <button data-a="kp" data-i="${k.n}">+</button></td><td>${sold(k.n)}</td><td><b>${left(k.n)}</b></td><td><button class="bad" data-a="rk" data-i="${k.n}">🗑</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">Cadastre seu primeiro kit.</td></tr>';
+   <td><button class="${s.delivered?'ok':'no'}" data-a="del" data-i="${s.id}">${s.delivered?'✓ Entregue':'Marcar entregue'}</button></td><td><button class="bad" data-a="rm" data-i="${s.id}">${ic('trash')}</button></td></tr>`).join('')||'<tr><td colspan="8" class="mut">Nenhuma venda.</td></tr>';
+  $('#kitlist').innerHTML=ks.map(k=>`<tr><td><b>Kit ${k.n}</b></td><td>${esc(k.f.join(' · '))}</td><td><div class="stk"><button data-a="km" data-i="${k.n}">−</button><input class="qn" type="number" min="0" value="${k.e||0}" data-k="${k.n}"><button data-a="kp" data-i="${k.n}">+</button></div></td><td>${sold(k.n)}</td><td><b>${left(k.n)}</b></td><td><button class="bad" data-a="rk" data-i="${k.n}">${ic('trash')}</button></td></tr>`).join('')||'<tr><td colspan="6" class="mut">Cadastre seu primeiro kit.</td></tr>';
   renderCart();
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t);$('#tt').textContent=b.querySelector('span').textContent;if(b.dataset.t=='saves')loadSaves()});

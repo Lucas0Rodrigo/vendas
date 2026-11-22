@@ -45,3 +45,8 @@ td{padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}td sma
 .wrap{padding-bottom:70px}.pos{grid-template-columns:1fr}main{padding:12px}}
 .qn{width:70px;text-align:center;margin:0;padding:6px}
 .top{display:flex;justify-content:space-between;align-items:center}#sv{background:#e4f3df;color:#2f6b25}#sv.dirty{background:var(--tom);color:#fff}#sv:disabled{opacity:.6}
+.wrap{background-color:#fff;background-image:linear-gradient(#d9dcdf 1px,transparent 1px),linear-gradient(90deg,#d9dcdf 1px,transparent 1px),linear-gradient(#eceef0 1px,transparent 1px),linear-gradient(90deg,#eceef0 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px}
+.ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
+.card i{color:#fff}.card i .ic{width:28px;height:28px}nav i{display:flex}nav .ic{width:20px;height:20px}.logo .ic{width:22px;height:22px}
+td{vertical-align:middle}.stk{display:flex;align-items:center;gap:6px}.stk button{width:32px;height:32px;padding:0;display:grid;place-items:center;flex:none}.stk .qn{width:64px;height:32px;padding:0;flex:none}
+#sv,.bad{display:inline-flex;align-items:center;gap:6px;justify-content:center}
