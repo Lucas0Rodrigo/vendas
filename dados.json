@@ -7,7 +7,7 @@
     "Maracuja",
     "70% Cacau"
    ],
-   "e": 2
+   "e": 1
   },
   {
    "n": 2,
@@ -93,6 +93,21 @@
    "items": [
     {
      "k": 6,
+     "q": 1
+    }
+   ],
+   "paid": false,
+   "method": "",
+   "paidDate": "",
+   "delivered": false
+  },
+  {
+   "id": 1795437756033,
+   "buyer": "Manel",
+   "date": "2026-11-23",
+   "items": [
+    {
+     "k": 1,
      "q": 1
     }
    ],
