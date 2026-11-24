@@ -81,10 +81,10 @@
      "q": 1
     }
    ],
-   "paid": false,
-   "method": "",
-   "paidDate": "",
-   "delivered": false
+   "paid": true,
+   "method": "Dinheiro",
+   "paidDate": "2026-11-24",
+   "delivered": true
   },
   {
    "id": 1795429406065,
@@ -96,10 +96,10 @@
      "q": 1
     }
    ],
-   "paid": false,
-   "method": "",
-   "paidDate": "",
-   "delivered": false
+   "paid": true,
+   "method": "Dinheiro",
+   "paidDate": "2026-11-24",
+   "delivered": true
   },
   {
    "id": 1795437756033,
