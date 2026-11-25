@@ -43,7 +43,7 @@
     "Maracuja",
     "Brigadeiro"
    ],
-   "e": 1
+   "e": 0
   },
   {
    "n": 6,
@@ -138,6 +138,21 @@
    "items": [
     {
      "k": 3,
+     "q": 1
+    }
+   ],
+   "paid": false,
+   "method": "",
+   "paidDate": "",
+   "delivered": false
+  },
+  {
+   "id": 1795606196934,
+   "buyer": "Raul",
+   "date": "2026-11-25",
+   "items": [
+    {
+     "k": 5,
      "q": 1
     }
    ],
