@@ -1,6 +1,191 @@
 {
  "auto": [
   {
+   "t": "2026-11-26T22:06:45.181Z",
+   "d": {
+    "kits": [
+     {
+      "n": 1,
+      "f": [
+       "Oreo",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 0
+     },
+     {
+      "n": 2,
+      "f": [
+       "Ferrero",
+       "Maracuja",
+       "70% Cacau"
+      ],
+      "e": 0
+     },
+     {
+      "n": 3,
+      "f": [
+       "Brigadeiro",
+       "Oreo",
+       "70% Cacau"
+      ],
+      "e": 0
+     },
+     {
+      "n": 4,
+      "f": [
+       "Oreo",
+       "Dois Amores",
+       "70% Cacau"
+      ],
+      "e": 2
+     },
+     {
+      "n": 5,
+      "f": [
+       "Oreo",
+       "Maracuja",
+       "Brigadeiro"
+      ],
+      "e": 0
+     },
+     {
+      "n": 6,
+      "f": [
+       "Dois Amores",
+       "Ferrero",
+       "70% Cacau"
+      ],
+      "e": 0
+     }
+    ],
+    "sales": [
+     {
+      "id": 1795368561263,
+      "buyer": "Lucas",
+      "date": "2026-11-22",
+      "items": [
+       {
+        "k": 2,
+        "q": 1
+       }
+      ],
+      "paid": true,
+      "method": "Pix",
+      "paidDate": "2026-11-22",
+      "delivered": true
+     },
+     {
+      "id": 1795429396113,
+      "buyer": "Julia",
+      "date": "2026-11-23",
+      "items": [
+       {
+        "k": 1,
+        "q": 1
+       }
+      ],
+      "paid": true,
+      "method": "Dinheiro",
+      "paidDate": "2026-11-24",
+      "delivered": true
+     },
+     {
+      "id": 1795429406065,
+      "buyer": "Renan",
+      "date": "2026-11-23",
+      "items": [
+       {
+        "k": 6,
+        "q": 1
+       }
+      ],
+      "paid": true,
+      "method": "Dinheiro",
+      "paidDate": "2026-11-24",
+      "delivered": true
+     },
+     {
+      "id": 1795437756033,
+      "buyer": "Manel",
+      "date": "2026-11-23",
+      "items": [
+       {
+        "k": 1,
+        "q": 1
+       }
+      ],
+      "paid": true,
+      "method": "Pix",
+      "paidDate": "2026-11-23",
+      "delivered": true
+     },
+     {
+      "id": 1795476229709,
+      "buyer": "Mãe",
+      "date": "2026-11-23",
+      "items": [
+       {
+        "k": 1,
+        "q": 1
+       }
+      ],
+      "paid": false,
+      "method": "",
+      "paidDate": "",
+      "delivered": true
+     },
+     {
+      "id": 1795605274126,
+      "buyer": "Renan",
+      "date": "2026-11-25",
+      "items": [
+       {
+        "k": 3,
+        "q": 1
+       }
+      ],
+      "paid": false,
+      "method": "",
+      "paidDate": "",
+      "delivered": false
+     },
+     {
+      "id": 1795606196934,
+      "buyer": "Raul",
+      "date": "2026-11-25",
+      "items": [
+       {
+        "k": 5,
+        "q": 1
+       }
+      ],
+      "paid": false,
+      "method": "",
+      "paidDate": "",
+      "delivered": false
+     },
+     {
+      "id": 1795730796141,
+      "buyer": "Julia",
+      "date": "2026-11-26",
+      "items": [
+       {
+        "k": 2,
+        "q": 1
+       }
+      ],
+      "paid": false,
+      "method": "",
+      "paidDate": "",
+      "delivered": false
+     }
+    ],
+    "repassado": 0,
+    "v": 2
+   }
+  },
+  {
    "t": "2026-11-26T22:05:46.053Z",
    "d": {
     "kits": [
