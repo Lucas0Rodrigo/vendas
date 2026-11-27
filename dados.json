@@ -144,7 +144,7 @@
    "paid": false,
    "method": "",
    "paidDate": "",
-   "delivered": false
+   "delivered": true
   },
   {
    "id": 1795606196934,
@@ -159,7 +159,7 @@
    "paid": true,
    "method": "Pix",
    "paidDate": "2026-11-26",
-   "delivered": false
+   "delivered": true
   },
   {
    "id": 1795730796141,
@@ -174,7 +174,7 @@
    "paid": false,
    "method": "",
    "paidDate": "",
-   "delivered": false
+   "delivered": true
   },
   {
    "id": 1795744193218,
