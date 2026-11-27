@@ -171,9 +171,9 @@
      "q": 1
     }
    ],
-   "paid": false,
-   "method": "",
-   "paidDate": "",
+   "paid": true,
+   "method": "Dinheiro",
+   "paidDate": "2026-11-27",
    "delivered": true
   },
   {
