@@ -34,7 +34,7 @@
     "Dois Amores",
     "70% Cacau"
    ],
-   "e": 2
+   "e": 1
   },
   {
    "n": 5,
@@ -156,9 +156,9 @@
      "q": 1
     }
    ],
-   "paid": false,
-   "method": "",
-   "paidDate": "",
+   "paid": true,
+   "method": "Pix",
+   "paidDate": "2026-11-26",
    "delivered": false
   },
   {
@@ -175,6 +175,21 @@
    "method": "",
    "paidDate": "",
    "delivered": false
+  },
+  {
+   "id": 1795744193218,
+   "buyer": "Lucas",
+   "date": "2026-11-27",
+   "items": [
+    {
+     "k": 4,
+     "q": 1
+    }
+   ],
+   "paid": true,
+   "method": "Pix",
+   "paidDate": "2026-11-26",
+   "delivered": true
   }
  ],
  "repassado": 0,
